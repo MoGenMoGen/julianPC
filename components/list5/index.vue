@@ -26,8 +26,8 @@
         <p :style="contStyle">{{item.content}}</p>
       </div>
     </div>
-    <div class="btn" :style="btnStyle">
-      <p @click="toPage()">查看更多 ></p>
+    <div class="btn">
+      <p @click="toPage()"  :style="btnStyle">查看更多 ></p>
     </div>
   </div>
 </template>
@@ -98,6 +98,8 @@
       //了解更多样式
       btnStyle(){
         return {
+          "borderColor" : this.info.btnBorderColor,
+          "backgroundColor" : this.info.btnBgColor,
           "fontSize" : this.info.btnFontSize ? this.info.btnFontSize+'px' : '14px',
           "color" : this.info.btnColor ? this.info.btnColor : '#0096E0'
         }
@@ -112,9 +114,11 @@
       //列表样式
       itemStyle(){
         return {
+          height: this.info.itemHeight ? this.info.itemHeight+'px' : 'auto',
+          marginBottom: this.info.itemMarginBottom+'px',
           backgroundColor:this.info.itemBg,
           borderColor: this.info.borderColor,
-          paddingBottom: this.info.listPaddingBottom ? this.info.listPaddingBottom+'px' : '30px',
+          paddingBottom: this.info.itemPaddingBottom ? this.info.itemPaddingBottom+'px' : '30px',
           borderRadius:this.info.radius+'px'
         }
       },

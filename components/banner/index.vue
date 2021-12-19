@@ -1,5 +1,5 @@
 <template>
-  <div class="banner"
+  <div class="banner containerAll"
        :style="myStyle"
   >
     <el-carousel

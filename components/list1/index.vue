@@ -14,7 +14,8 @@
     <div class="main" :style="{width:width+'px'}">
       <div class="item" v-for="(item,index) in list"
            :key="index"
-           @mousemove="item.active=true"
+           :class="{active:item.active}"
+           @mousemove="item.active= info.itemActiveBg && info.itemActiveBg!=' ' ? true : false"
            @mouseout="item.active=false"
            :style="{
              width:listWidth+'px',
@@ -116,7 +117,7 @@
         return {
            backgroundColor:this.info.itemBg,
            borderColor: this.info.borderColor,
-           paddingBottom: this.info.listPaddingBottom ? this.info.listPaddingBottom+'px' : '30px',
+           paddingBottom: this.info.itemPaddingBottom ? this.info.itemPaddingBottom+'px' : '30px',
            borderRadius:this.info.radius+'px',
            marginBottom: this.info.ItemMarginBottom+'px',
            height:this.info.itemHeight?this.info.itemHeight+'px' : 'auto'
@@ -124,21 +125,25 @@
       },
       //总框架的样式
       myStyle(){
-          return {
-            width: this.bWidth + 'px',
-            backgroundColor:this.info.bgColor,
-            backgroundImage:"url('"+this.info.bgImage+"')",
-            paddingTop:this.info.paddingTop+'px',
-            paddingBottom:this.info.paddingBottom+'px',
-            marginTop:this.info.marginTop+'px',
-            marginBottom:this.info.marginBottom+'px',
-
-            "--contPadding":'0 '+this.info.itemPadding+'px',
-            "--contImagePaddingTop":this.info.imgPaddingTop+'px',
-            "--contImagePaddingBottom":this.info.imgPaddingBottom+'px',
-            "--itemActiveBg":this.info.itemActiveBg ? this.info.itemActiveBg : this.info.itemBg,
-            "--itemActiveColor":this.info.itemActiveColor ? this.info.itemActiveColor :this.info.titleColor,
-          }
+        let style = {
+          width: this.bWidth + 'px',
+          backgroundColor:this.info.bgColor,
+          backgroundImage:"url('"+this.info.bgImage+"')",
+          paddingTop:this.info.paddingTop+'px',
+          paddingBottom:this.info.paddingBottom+'px',
+          marginTop:this.info.marginTop+'px',
+          marginBottom:this.info.marginBottom+'px',
+          "--contPadding":'0 '+this.info.itemPadding+'px',
+          "--contImagePaddingTop":this.info.imgPaddingTop+'px',
+          "--contImagePaddingBottom":this.info.imgPaddingBottom+'px',
+        }
+        if(this.info.itemActiveBg){
+          style["--itemActiveBg"] = this.info.itemActiveBg
+        }
+        if(this.info.itemActiveColor){
+          style["--itemActiveColor"] = this.info.itemActiveColor
+        }
+          return style
       },
     },
     async created() {
@@ -212,12 +217,7 @@
         box-sizing: border-box;
         overflow: hidden;
         cursor: pointer;
-        &:hover{
-          background-color:var(--itemActiveBg,"inherit")!important;
-          p{
-            color: var(--itemActiveColor,inherit)!important;
-          }
-        }
+
         img{
           width: auto;
           max-width: 100%;
@@ -235,6 +235,12 @@
           &:hover{
             text-decoration: underline;
           }
+        }
+      }
+      .active{
+        background-color:var(--itemActiveBg,"inherit")!important;
+        p{
+          color: var(--itemActiveColor,inherit)!important;
         }
       }
     }
