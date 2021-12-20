@@ -4,12 +4,13 @@
 */
 import {component} from "v-viewer";
 
+import banner from '../banner';
 import newsList1 from './list1';
 
 
 export default (() => {
   const list = [
-    newsList1
+    banner,newsList1
   ]
   let result = {}
   //循环注册组件

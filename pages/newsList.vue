@@ -66,6 +66,15 @@ export default {
           current:this.current,
           size:this.size,
           cids_like:this.pageInfo.bindId
+        }).then(res=>{
+          res.records.forEach(item=>{
+            let date = item.releTm.split(' ')[0]
+            item.year = date.split('-')[0]
+            item.month = date.split('-')[1]+'.'+date.split('-')[2]
+            item.nm = item.title
+            item.content = item.cont.replace(/<\/?[^>]*>/g, "").replace(/&nbsp;/ig, "");
+          })
+          this.list = res.records
         })
     },
     getWidth() {

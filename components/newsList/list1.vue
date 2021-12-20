@@ -2,10 +2,8 @@
   <div class="list containerAll"
        :style="myStyle"
   >
-    <div class="title" v-if="info.titleShow" :style="levelTitle">
-      <p v-if="info.title" :style="{fontWeight:this.info.levelFontWeight==1 ? 'bold':'normal',color:this.info.color,fontSize:this.info.fontSize+'px'}">{{info.title}}</p>
-      <img :src="info.img" v-if="info.img" :style="{paddingTop:this.info.imgPaddingTop+'px',paddingBottom:this.info.imgPaddingBottom+'px'}"/>
-      <p v-if="info.title2">{{info.title2}}</p>
+    <div class="search" v-if="info.titleShow">
+
     </div>
     <div class="main" :style="{width:width+'px'}">
 
@@ -13,7 +11,7 @@
            :key="index"
            :style="{
              width:listWidth+'px',
-             marginLeft:index%myNum>0 ? info.listMargin? info.listMargin+'px' : myMargin+'px' : '0',
+             marginLeft:index%myNum>0 ? info.itemMargin? info.itemMargin+'px' : myMargin+'px' : '0',
              ...itemStyle
            }"
       >
@@ -21,13 +19,10 @@
           <span>{{item.month}}</span>
           {{item.year}}
         </p>
-        <img :src="item.active && item.imgUrl2 ? item.imgUrl2 : item.imgUrl"/>
+        <img :src="item.imgUrl"/>
         <p :style="titleStyle">{{item.nm}}</p>
         <p :style="contStyle">{{item.content}}</p>
       </div>
-    </div>
-    <div class="btn">
-      <p @click="toPage()"  :style="btnStyle">查看更多 ></p>
     </div>
   </div>
 </template>
@@ -39,6 +34,7 @@
       return {
         myNum:4,
         myMargin:20,
+        keyWords:'',
       };
     },
     computed:{
@@ -46,7 +42,6 @@
       //标题样式
       titleStyle(){
         return {
-          "textAlign":this.info.itemAlign,
           "fontSize" : this.info.titleFontSize+'px',
           "color" : this.info.titleColor ? this.info.titleColor : '#303030',
           "paddingTop":this.info.titlePaddingTop ? this.info.titlePaddingTop+'px' : '20px',
@@ -56,11 +51,9 @@
       //内容样式
       contStyle(){
         return {
-          "textAlign":this.info.itemAlign,
           "fontSize" : this.info.contFontSize ? this.info.contFontSize+'px' : '14px',
           "color" : this.info.contColor ? this.info.contColor : '#606060',
           "lineHeight" : this.info.contLineHeight ? this.info.contLineHeight+'px' : '24px',
-          "paddingBottom":this.info.contPaddingBottom ? this.info.contPaddingBottom+'px' : '32px'
         }
       },
 
@@ -82,23 +75,12 @@
           borderRadius:this.info.radius+'px'
         }
       },
-      //总框架的样式
+      //总列表的样式
       myStyle(){
         return {
-          width: this.bWidth + 'px',
-          backgroundColor:this.info.bgColor,
-          backgroundImage:"url('"+this.info.bgImage+"')",
-          paddingTop:this.info.paddingTop+'px',
-          paddingBottom:this.info.paddingBottom+'px',
           marginTop:this.info.marginTop+'px',
           marginBottom:this.info.marginBottom+'px',
 
-          "--contPadding":'0 '+this.info.itemPadding+'px',
-          "--contImagePaddingTop":this.info.imgPaddingTop+'px',
-          "--contImagePaddingBottom":this.info.imgPaddingBottom+'px',
-          "--itemActiveBg":this.info.itemActiveBg ? this.info.itemActiveBg : this.info.itemBg,
-          "--itemActiveColor":this.info.itemActiveColor ? this.info.itemActiveColor :this.info.titleColor,
-          "--itemTitleColor":this.info.titleColor,
         }
       },
     },
