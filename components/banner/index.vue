@@ -43,7 +43,7 @@ export default {
 
     myStyle(){
       return {
-        width: this.bWidth + 'px',
+
         paddingTop:this.info.paddingTop+'px',
         paddingBottom:this.info.paddingBottom+'px',
       }
@@ -59,9 +59,20 @@ export default {
     async setData(){
       // console.log('banner')
       this.list = await this.api.getBannerById(this.pageInfo.bindId)
-       this.pageInfo.configs.forEach(item=>{
-         this.info[item.name] = item.value
-       })
+      console.log(this.list)
+      if(this.pageInfo.configs){
+        this.pageInfo.configs.forEach(item=>{
+          this.info[item.name] = item.value
+        })
+      }
+
+      if(!this.info.height){
+        let img = new Image()
+        img.src = this.list[0].imgUrl
+        img.onload=()=>{
+          this.height = img.height
+        }
+      }
     },
     toPage(item){
         if(item.locUrl){
@@ -75,6 +86,8 @@ export default {
 <style lang="less" scoped>
 @import url("../../assets/css/init.less");
 .banner {
+  width: 100%;
+  min-width: 1000px;
   .bannerItem{
     width: 100%;
     height: 100%;

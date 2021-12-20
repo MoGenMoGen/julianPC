@@ -112,6 +112,14 @@ class api {
             });
         });
     }
+  //获取栏目详情
+  getMenuDetail(id) {
+    return new Promise((resolve, reject) => {
+      get("/open/blade-site/sitecolumns/detail?id="+id).then(res => {
+        resolve(res.data)
+      });
+    });
+  }
 
     //获取栏目下的列表
     getList(data) {

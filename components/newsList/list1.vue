@@ -32,49 +32,17 @@
   </div>
 </template>
 <script>
-  import img1 from './images/1.png'
-  import img2 from './images/2.png'
-  import img3 from './images/3.png'
-  import img4 from './images/4.png'
   export default {
-    name: "list5",
-    props: ['pageInfo','width','bWidth'],
+    name: "newsList1",
+    props: ['info','width','list'],
     data() {
       return {
         myNum:4,
         myMargin:20,
-        info:{},
-        list:[],
-        myList:[{
-          nm:'曾因涨价被北大抵制的中国知网',
-          cont:'曾因频繁涨价被北京大学图书馆、武汉理工大 学图书馆抵制的中国知网，栽在了中南...',
-          imgUrl:img1
-        },{
-          nm:'抖音回应两员工收钱帮人上热搜...',
-          cont:'11月30日，红星资本局从裁判文书网获悉，字 节跳动两名员工王某迪与张某迎因非法收...',
-          imgUrl:img2
-        },{
-          nm:'30年前，钱学森为什么将VR译为...',
-          cont:'1990年11月27日，钱学森给时任国家863计划 智能计算机专家组组长、同时也是自己的',
-          imgUrl:img3
-        },{
-          nm:'36氪独家 字节跳动2021广告收入...',
-          cont:'11月23日，36氪从多个信源处了解到，字节跳 动今年上半年完成广告营收约1150亿元人...',
-          imgUrl:img4
-        }]
       };
     },
     computed:{
-      //组件标题总体样式
-      levelTitle(){
-        return {
-          "background": this.info.levelTitleBg,
-          "fontSize" : this.info.titleFontSize ,
-          "color" : this.info.titleColor,
-          "paddingTop":this.info.levelTitlePaddingTop+'px' ,
-          "paddingBottom":this.info.levelTitlePaddingBottom+'px'
-        }
-      },
+
       //标题样式
       titleStyle(){
         return {
@@ -95,15 +63,7 @@
           "paddingBottom":this.info.contPaddingBottom ? this.info.contPaddingBottom+'px' : '32px'
         }
       },
-      //了解更多样式
-      btnStyle(){
-        return {
-          "borderColor" : this.info.btnBorderColor,
-          "backgroundColor" : this.info.btnBgColor,
-          "fontSize" : this.info.btnFontSize ? this.info.btnFontSize+'px' : '14px',
-          "color" : this.info.btnColor ? this.info.btnColor : '#0096E0'
-        }
-      },
+
       //列表宽度
       listWidth(){
         let num = this.info.num ? parseInt(this.info.num) : this.myNum
@@ -143,50 +103,13 @@
       },
     },
     async created() {
-      this.pageInfo.configs.forEach(item=>{
-        this.info[item.name] = item.value
-        this.$set(this.info,item.name,item.value)
-      })
+
       this.myNum = this.info.num ? this.info.num : 1
       this.myMargin = parseFloat(this.info.margin)
       // console.log(this.info)
 
-      this.setData()
     },
     methods: {
-      async setData(){
-        let list = []
-        if(this.pageInfo.types==1){ //广告
-          list = await this.api.getBannerById(this.pageInfo.bindId,this.info.total)
-        }else { //新闻
-          let newsData = await this.api.getNews({
-            current:1,
-            size:this.info.total,
-            cids_like:this.pageInfo.bindId
-          })
-          newsData.records.forEach(item=>{
-            item.nm = item.title
-            item.content = item.cont.replace(/<\/?[^>]*>/g, "").replace(/&nbsp;/ig, "");
-          })
-          list = newsData.records
-        }
-        list.forEach((item,index)=>{
-          let date = item.releTm.split(' ')[0]
-          item.year = date.split('-')[0]
-          item.month = date.split('-')[1]+'.'+date.split('-')[2]
-          item.imgUrl = item.imgUrl ? item.imgUrl.split(',')[0] : ''
-          item.imgUrl2 = item.imgUrl2 ? item.imgUrl2.split(',')[0] : ''
-          item.active = false
-          this.$set(list,index,item)
-        })
-        let list2 = list && list.length>0 ? list : this.myList
-        list2.forEach(item=>{
-          item.nm = item.nm.length > 15 ? item.nm.slice(0,15)+'...' : item.nm
-          item.content = item.content.length > 40 ? item.content.slice(0,40)+'...' : item.content
-        })
-        this.list = list2
-        // console.log(this.list)
-      },
       toPage(item){
         if(item.locUrl){
           this.until.href(item.locUrl)

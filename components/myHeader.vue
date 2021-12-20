@@ -78,9 +78,9 @@ export default {
       if (item.types==9){//自定义页面
         window.location.href = "./?pageId="+item.id;
       } else if(item.types == 2) { //栏目
-        window.location.href = "./newsList?id=" + item.id;
+        window.location.href = "./newsList?pageId=" + item.id;
       }else if(item.types == 3){ //内容
-        window.location.href = "./pageInfo?id=" + item.id;
+        window.location.href = "./pageInfo?pageId=" + item.id;
       }
     },
   },

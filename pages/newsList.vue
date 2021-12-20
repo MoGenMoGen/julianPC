@@ -1,19 +1,19 @@
 <template>
   <div id="home" >
+    <banner :pageInfo="bannerInfo" v-if="bannerInfo.bindId"></banner>
     <component
       :width="width"
-      :bWidth="bWidth"
-      v-for="(item,index) in pageList"
-      :key="index"
-      :is="item.url"
-      :pageInfo="item"
+      :is="pageInfo.url"
+      :info="info"
+      :list="list"
     />
+
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   //注册自定义组件
-  import components from '@/components/';
+  import components from '@/components/newsList';
 export default {
   head: {
     script: [],
@@ -22,50 +22,15 @@ export default {
   components: components,
   data() {
     return {
-      bWidth:1200,
+      bannerInfo:{
+        bindId:'',
+      },
       width:1200,
-      name: "",
-      pageList:[{
-        name:'banner',
-        info:{}
-      },{
-        name:'list1',
-        info:{}
-      },{
-        name:'list2',
-        info:{}
-      },{
-        name:'list3',
-        info:{}
-      },{
-        name:'list4',
-        info:{}
-      },{
-        name:'list5',
-        info:{}
-      },{
-        name:'list6',
-        info:{}
-      },{
-        name:'list7',
-        info:{}
-      },{
-        name:'list8',
-        info:{}
-      },{
-        name:'list9',
-        info:{}
-      },{
-        name:'list10',
-        info:{}
-      },{
-        name:'list11',
-        info:{}
-      },{
-        name:'list12',
-        info:{}
-      }],
-      banner: [],
+      pageInfo: {},
+      list:[],
+      current:1,
+      size:12,
+      info:{},
     };
   },
 
@@ -85,7 +50,23 @@ export default {
   watch: {},
   methods: {
     async getInfo(){
-        this.pageList = await this.api.getPageInfo(1)
+        let id = this.until.getQueryString('pageId')
+        this.pageInfo = await this.api.getMenuDetail(id)
+        this.bannerInfo.bindId = this.pageInfo.advertPosId
+        this.pageInfo.configs.forEach(item=>{
+          this.info[item.name] = item.value
+          this.$set(this.info,item.name,item.value)
+        })
+        this.size = this.info.total ? this.info.total : 12
+
+        this.getList()
+    },
+    getList(){
+        this.api.getNews({
+          current:this.current,
+          size:this.size,
+          cids_like:this.pageInfo.bindId
+        })
     },
     getWidth() {
       let width = document.documentElement.clientWidth;
