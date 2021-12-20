@@ -117,7 +117,6 @@
         let list2 = list && list.length>0 ? list : this.myList
 
         this.myInfo = list2[0]
-        console.log(this.myInfo)
       },
       toPage(item){
         if(item.locUrl){

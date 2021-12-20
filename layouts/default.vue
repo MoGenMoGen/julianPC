@@ -3,7 +3,7 @@
     id="container"
   >
     <my-header :width="width"
-               :bWidth="bWidth"></my-header>
+               :bWidth="bWidth" :navList="navList"></my-header>
        <nuxt/>
     <myFooter
       :width="width"
@@ -18,6 +18,8 @@ import myFooter from "@/components/myFooter";
 
 import codeBig from "./img/bigcode.png";
 import line from "./img/line.png";
+
+import {mapMutations}from 'vuex'
 export default {
   provide () {
     return {
@@ -33,14 +35,7 @@ export default {
       ddCode: "",
       currentNav: "",
       currentTab: 0,
-      navList: [
-        {
-          title: "首页",
-          cd: "home",
-          url: "/",
-          showType: 0,
-        },
-      ],
+      navList: [],
       key: "",
       maList: [],
       codeBig,
@@ -49,10 +44,19 @@ export default {
       declare: false, //是否是申报页面，是的话头部底部都不显示
       ifHeader: true, //是否显示头部，
       ifTopic: false, //是否专题
+      pageId:'',
     };
   },
-  computed: {},
+  computed: {
+
+  },
   async mounted() {
+    let data = await this.api.getMenuNav(0);
+    data.forEach(item=>{
+      item.active = false
+    })
+    this.navList = data;
+    this.getNav()
 
     this.changeRoute();
     // this.$nextTick(() => {
@@ -68,10 +72,19 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['setPageId']),
+    async getNav() {
+      if(this.until.getQueryString('pageId')){
+        this.pageId = this.until.getQueryString('pageId')
+      }else {
+        let info = this.navList.find(item=>item.types==9)
+        this.pageId = info.id
+      }
+      this.setPageId(this.pageId)
+    },
     ifPC() {
       let appUrl = "http://zjfyweb.jinkworld.com/";
       // let appUrl = 'http://192.168.0.67:8080/'
-      console.log(this.App.IsPC());
       if (!this.App.IsPC()) {
         //不是PC端打开
         if (window.location.pathname === "/zjfy/") {
@@ -119,7 +132,6 @@ export default {
         this.width = 1200;
         this.bWidth = width;
       }
-      console.log(this.bWidth)
     },
 
     changeRoute() {
@@ -143,6 +155,7 @@ export default {
   },
   watch: {
     $route(to) {
+      this.getNav()
       this.changeRoute();
     },
   },

@@ -162,7 +162,7 @@
         this.info[item.name] = item.value
         this.$set(this.info,item.name,item.value)
       })
-      console.log(this.info)
+      // console.log(this.info)
       this.myNum = this.info.num ? this.info.num : 1
       this.myMargin = parseFloat(this.info.margin)
       this.setData()

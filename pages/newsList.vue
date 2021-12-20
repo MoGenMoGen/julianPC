@@ -70,6 +70,7 @@ export default {
   },
 
   async mounted() {
+    this.getInfo()
     this.getWidth()
     window.onresize = () => {
       return (() => {
@@ -79,24 +80,12 @@ export default {
 
   },
   computed:{
-    pageId(){
-      return this.$store.state.pageId
-    }
+
   },
-  watch: {
-    pageId:{
-      handler(){
-        if(this.pageId){
-          this.getInfo();
-        }
-      },
-      immediate:true
-    },
-  },
+  watch: {},
   methods: {
     async getInfo(){
-
-        this.pageList = await this.api.getPageInfo(this.pageId)
+        this.pageList = await this.api.getPageInfo(1)
     },
     getWidth() {
       let width = document.documentElement.clientWidth;

@@ -5,7 +5,16 @@
         <img :src="info.logo ? info.logo : logo" alt="">
       </div>
       <ul>
-        <li v-for="(item,index) in navList" :key="index" :class="{active:item.active}">{{item.nm}}</li>
+        <li v-for="(item,index) in navList" :key="index"
+            :class="{active:item.id==pageId || item.active}"
+            @click="toPage(item)"
+            @mouseenter="mouseItem(item)"
+            @mouseleave="item.active=false">
+          <p>{{item.name}}</p>
+          <div class="itemList" v-show="item.active && currentList.length">
+            <p v-for="(v,i) in currentList" :key="i" @click="toPage(v)">{{v.name}}</p>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
@@ -14,39 +23,12 @@
 import logo from "./images/logo.png";
 export default {
   name: "App",
-  props: [ "width", "bWidth"],
+  props: [ "width", "bWidth","navList"],
   data() {
     return {
-      navList: [
-        {
-          nm: "首页",
-          cd: "home",
-          url: "/",
-        },{
-          nm: "行业",
-          cd: "home",
-          url: "/home",
-        },{
-          nm: "新闻",
-          cd: "home",
-          url: "/home",
-        },{
-          nm: "产品",
-          cd: "home",
-          url: "/home",
-        },{
-          nm: "解决方案",
-          cd: "home",
-          url: "/home",
-        },{
-          nm: "关于我们",
-          cd: "home",
-          url: "/home",
-        },
-      ],
-      logo,
+      currentList:[],
       info:{
-        logo:''
+        logo,
       }
     };
   },
@@ -62,6 +44,9 @@ export default {
         "--fontSize" : this.info.fontSize ? this.info.fontSize+'px' : '18px',
         "--activeColor":this.info.activeColor ? this.info.activeColor : '#0096E0'
       }
+    },
+    pageId(){
+      return this.$store.state.pageId
     }
   },
   async mounted() {
@@ -69,6 +54,14 @@ export default {
 
   },
   methods: {
+    async mouseItem(item){
+      if(item.hasChildren){
+        this.currentList = await this.api.getMenuNav(item.id);
+      }else {
+        this.currentList = []
+      }
+      item.active=true
+    },
     changeRoute() {
       let path = window.location.pathname
       this.navList.forEach((item,index)=>{
@@ -80,20 +73,14 @@ export default {
         this.$set(this.navList,index,item)
       })
     },
-    async getNav() {
-      let data = await this.api.getMenuNav({ parentId: 0 });
-      data.forEach((item) => {
-        if (item.showPos.indexOf("1") > -1) {
-          this.navList.push(item);
-        }
-      });
-    },
+
     toPage(item) {
-      if (item.url) {
-        window.location.href = "./index.html";
-      } else {
-        window.location.href =
-          "./list.html#/newList?id=" + item.id + "&nm=" + item.nm;
+      if (item.types==9){//自定义页面
+        window.location.href = "./?pageId="+item.id;
+      } else if(item.types == 2) { //栏目
+        window.location.href = "./newsList?id=" + item.id;
+      }else if(item.types == 3){ //内容
+        window.location.href = "./pageInfo?id=" + item.id;
       }
     },
   },
@@ -126,100 +113,33 @@ export default {
       li{
         margin-left: 20px;
         display: inline-block;
-        padding: 0 10px 15px;
+        height: 50px;
+        width: 100px;
+        text-align: center;
+        line-height: 50px;
         color: var(--fontColor);
         font-size: var(--fontSize);
         cursor: pointer;
         border-bottom: 2px solid transparent;
-      }
-      li:hover,li.active{
-        color: var(--activeColor);
-        border-bottom: 2px solid var(--activeColor);
-      }
-    }
-  }
-  .header-content {
-    width: 100%;
-    background-color: #1e2d4c;
-    .cont-wrap {
-      width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      display: -webkit-flex;
-      flex-flow: row nowrap;
-      align-items: center;
-      color: #fff;
-      ul {
-        display: flex;
-        display: -webkit-flex;
-        flex-flow: row nowrap;
-        flex: 1;
-        li {
-          list-style: none;
-          flex: 1;
-          text-align: center;
-          cursor: pointer;
-          height: 76px;
-          line-height: 76px;
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          p {
-            text-align: center;
-            flex: 1;
+        position: relative;
+        .itemList{
+          position: absolute;
+          left: 0;
+          top:52px;
+          width: 100%;
+          z-index: 10000;
+          background: #ffffff;
+          font-size: 14px;
+          p:hover{
+            color: var(--activeColor);
           }
         }
-        li:hover {
-          text-decoration: underline;
-          color: @themeColor;
+      }
+      li:hover,li.active{
+        >p{
+          color: var(--activeColor);
         }
-      }
-    }
-    .search {
-      margin-left: 4%;
-      margin-right: 1%;
-      input {
-        border: 0;
-        background-color: #8e95a6;
-        padding: 5px 0;
-      }
-      button {
-        cursor: pointer;
-        margin-left: 10px;
-        padding: 5px;
-        border: 0;
-        background-color: #000;
-        color: #fff;
-      }
-    }
-  }
-  .index-bg {
-    width: 100%;
-    height: 300px;
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: cover;
-    .company-logo {
-      width: 1200px;
-      margin: 0 auto;
-      height: 300px;
-      display: flex;
-      display: -webkit-flex;
-      align-items: center;
-      padding: 0 1%;
-      box-sizing: border-box;
-      img {
-        width: auto;
-        height: auto;
-        max-width: 100%;
-        max-height: 100%;
-      }
-      > p {
-        flex: 1;
-        text-align: right;
-        img {
-          margin-left: 10px;
-        }
+        border-bottom: 2px solid var(--activeColor);
       }
     }
   }

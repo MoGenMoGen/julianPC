@@ -6,6 +6,7 @@ import {
   reg
 } from "./until";
 
+import store from '../../store'
 
 require('../css/common.css'); //PC
 
@@ -28,6 +29,7 @@ var App= {
     Vue.prototype.query =  query
     Vue.prototype.hostUrl =  hostUrl
     Vue.prototype.objectFitImages =  objectFitImages
+    Vue.prototype.$store = store
   }
 }
 Vue.use(App)

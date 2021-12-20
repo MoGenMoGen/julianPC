@@ -21,7 +21,7 @@ export default {
       // { rel: 'icon', type: 'image/x-icon', href: '/zjfy/favicon.ico' }
     ],
     script: [
-      { src: 'https://v1.cnzz.com/z_stat.php?id=1278902410&web_id=1278902410', async: 'async', defer: 'defer' }, //友盟统计
+      // { src: 'https://v1.cnzz.com/z_stat.php?id=1278902410&web_id=1278902410', async: 'async', defer: 'defer' }, //友盟统计
     ],
   },
   /*

@@ -87,7 +87,7 @@ class api {
       });
     });
   }
-  //获楼广告
+  //获取广告
   getBannerById(id) {
     return new Promise((resolve, reject) => {
       get("/open/advertinfo/listAdsByPosId?posId="+id).then(res => {
@@ -95,7 +95,7 @@ class api {
       });
     });
   }
-  //获楼广告
+  //获取新闻
   getNews(data) {
     return new Promise((resolve, reject) => {
       get("/open/blade-content/contentdetail/page",data).then(res => {
@@ -104,9 +104,9 @@ class api {
     });
   }
     //获取栏目
-    getMenuNav(data) {
+    getMenuNav(id) {
         return new Promise((resolve, reject) => {
-            get("/open/blade-content/contentcat/listByParentId", data).then(res => {
+            get("/open/blade-site/sitecolumns/list?parentId="+id).then(res => {
 
                 resolve(res.data)
             });
