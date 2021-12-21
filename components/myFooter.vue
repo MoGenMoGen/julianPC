@@ -54,6 +54,7 @@ export default {
 #footer {
   background: #ffffff;
   color: #666;
+  border-top: 1px solid rgba(0,0,0,0.1);
   .main{
     margin: 40px auto;
     text-align: center;

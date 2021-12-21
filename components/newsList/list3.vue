@@ -2,9 +2,6 @@
   <div class="list containerAll"
        :style="myStyle"
   >
-    <div class="search" v-if="info.titleShow">
-
-    </div>
     <div class="main" :style="{width:width+'px'}">
 
       <div class="item" v-for="(item,index) in list"
@@ -16,20 +13,16 @@
              ...itemStyle
            }"
       >
-        <p class="date">
-          <span>{{item.month}}</span>
-          {{item.year}}
-        </p>
         <img :src="item.imgUrl" :style="imgStyle"/>
-        <p :style="titleStyle">{{item.nm}}</p>
-        <p :style="contStyle">{{item.content}}</p>
+        <p :style="titleStyle">{{item.nm.length>10 ? item.nm.slice(0,15)+'...' : item.nm}}</p>
+        <p :style="dateStyle">{{item.releTm.split(' ')[0]}}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
   export default {
-    name: "newsList1",
+    name: "newsList3",
     props: ['info','width','list'],
     data() {
       return {
@@ -54,12 +47,11 @@
           "paddingBottom":this.info.titlePaddingBottom ? this.info.titlePaddingBottom+'px' : '10px'
         }
       },
-      //内容样式
-      contStyle(){
+      //日期样式
+      dateStyle(){
         return {
-          "fontSize" : this.info.contFontSize ? this.info.contFontSize+'px' : '14px',
-          "color" : this.info.contColor ? this.info.contColor : '#606060',
-          "lineHeight" : this.info.contLineHeight ? this.info.contLineHeight+'px' : '24px',
+          "fontSize" : this.info.dateFontSize ? this.info.dateFontSize+'px' : '14px',
+          "color" : this.info.dateColor ? this.info.dateColor : '#606060',
         }
       },
 
@@ -124,17 +116,6 @@
         flex-direction: column;
         cursor: pointer;
         overflow: hidden;
-        .date{
-          color: #909090;
-          font-size: 14px;
-          padding-bottom: 8px;
-          span{
-            color: #606060;
-            font-size: 24px;
-            display: block;
-            padding-bottom: 8px;
-          }
-        }
         img{
           width: auto;
           max-width: 100%;
