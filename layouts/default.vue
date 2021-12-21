@@ -125,7 +125,7 @@ export default {
         this.bWidth = 1000;
       }
       if (width >= 1000 && width <= 1200) {
-        this.width = 1000;
+        this.width = width * 0.94;
         this.bWidth = width;
       }
       if (width > 1200) {

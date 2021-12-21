@@ -7,12 +7,11 @@
       <ul>
         <li v-for="(item,index) in navList" :key="index"
             :class="{active:item.id==pageId || item.active}"
-            @click="toPage(item)"
             @mouseenter="mouseItem(item)"
             @mouseleave="item.active=false">
-          <p>{{item.name}}</p>
+          <p  @click="toPage(item)">{{item.name}}</p>
           <div class="itemList" v-show="item.active && currentList.length">
-            <p v-for="(v,i) in currentList" :key="i" @click="toPage(v)">{{v.name}}</p>
+            <p v-for="(v,i) in currentList" :key="i" @click="toPage(v)">{{v.name}}1</p>
           </div>
         </li>
       </ul>
@@ -75,6 +74,9 @@ export default {
     },
 
     toPage(item) {
+
+      console.log(item)
+
       if (item.types==9){//自定义页面
         window.location.href = "./?pageId="+item.id;
       } else if(item.types == 2) { //栏目

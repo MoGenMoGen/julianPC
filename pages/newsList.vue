@@ -1,12 +1,34 @@
 <template>
   <div id="home" >
     <banner :pageInfo="bannerInfo" v-if="bannerInfo.bindId"></banner>
-    <component
-      :width="width"
-      :is="pageInfo.url"
-      :info="info"
-      :list="list"
-    />
+    <div class="newsListMain" :style="{width:width+'px'}">
+      <div class="search" v-if="pageInfo.hasSearchBox==1">
+        <el-input
+          @change="toSearch"
+          placeholder="请输入关键字"
+          suffix-icon="el-icon-search"
+          v-model="keyWords">
+        </el-input>
+      </div>
+      <component
+        :width="width"
+        :is="pageInfo.url"
+        :info="info"
+        :list="list"
+        @toDetail="toDetail"
+      />
+      <div class="pageNo" :style="{textAlign:pageAlign}">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="current"
+          :page-size="size"
+          layout="total, prev, pager, next"
+          :total="total">
+        </el-pagination>
+      </div>
+
+    </div>
 
   </div>
 </template>
@@ -25,12 +47,15 @@ export default {
       bannerInfo:{
         bindId:'',
       },
+      pageAlign:'left',
       width:1200,
       pageInfo: {},
       list:[],
       current:1,
       size:12,
       info:{},
+      total:0,
+      keyWords:'',
     };
   },
 
@@ -49,6 +74,13 @@ export default {
   },
   watch: {},
   methods: {
+    toDetail(item){
+      this.until.href('./newsDetail?id='+item.id)
+    },
+    toSearch(){
+      this.current = 1
+      this.getList()
+    },
     async getInfo(){
         let id = this.until.getQueryString('pageId')
         this.pageInfo = await this.api.getMenuDetail(id)
@@ -57,9 +89,19 @@ export default {
           this.info[item.name] = item.value
           this.$set(this.info,item.name,item.value)
         })
-        this.size = this.info.total ? this.info.total : 12
+        this.size = this.info.total ? parseInt(this.info.total) : 12
 
         this.getList()
+    },
+    //更改一页多少个
+    handleSizeChange(val){
+        this.size = val
+       this.getList()
+    },
+    //切换页面
+    handleCurrentChange(val){
+      this.current = val
+      this.getList()
     },
     getList(){
         this.api.getNews({
@@ -73,8 +115,10 @@ export default {
             item.month = date.split('-')[1]+'.'+date.split('-')[2]
             item.nm = item.title
             item.content = item.cont.replace(/<\/?[^>]*>/g, "").replace(/&nbsp;/ig, "");
+            item.content = item.content.slice(0,35)+'...'
           })
           this.list = res.records
+          this.total = res.total
         })
     },
     getWidth() {
@@ -105,6 +149,15 @@ export default {
 #home {
   width: 100%;
   min-width:1000px;
+  .newsListMain{
+    margin: 0 auto;
+  }
+  .search{
+     display: block;
+     width: 285px;
+     margin: 30px 0;
+  }
+
 }
 </style>
 
