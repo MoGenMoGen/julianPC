@@ -15,7 +15,9 @@
         :is="pageInfo.url"
         :info="info"
         :list="list"
+        :pageInfo="pageInfo"
         @toDetail="toDetail"
+        @choose="choose"
       />
       <div class="pageNo" :style="{textAlign:pageAlign}">
         <el-pagination
@@ -74,6 +76,9 @@ export default {
   },
   watch: {},
   methods: {
+    choose(id) {
+      this.getList(id)
+    },
     toDetail(item){
       this.until.href('./newsDetail?id='+item.id)
     },
@@ -103,11 +108,11 @@ export default {
       this.current = val
       this.getList()
     },
-    getList(){
+    getList(id){
         this.api.getNews({
           current:this.current,
           size:this.size,
-          cids_like:this.pageInfo.bindId
+          cids_like:id ? id : this.pageInfo.bindId
         }).then(res=>{
           res.records.forEach(item=>{
             let date = item.releTm.split(' ')[0]
@@ -160,4 +165,3 @@ export default {
 
 }
 </style>
-

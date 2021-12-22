@@ -486,6 +486,14 @@ class api {
                 })
         })
     }
+    // 栏目-根据父id获取栏目列表
+    getListByParentId(data){
+        return new Promise((resolve, reject) => {
+            get("/open/blade-content/contentcat/listByParentId?parentId="+data).then(res => {
+                resolve(res.data)
+            });
+        });
+    }
 }
 
 export { api, hostUrl };
