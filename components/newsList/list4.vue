@@ -15,7 +15,7 @@
           <div>
             <p :style="titleStyle">{{item.nm.length>titleLength?item.nm.substring(0,titleLength)+'...':item.nm}}</p>
             <p :style="timeStyle">{{item.releTm.substring(0,10)}}</p>
-            <p :style="contStyle">{{item.content.length>contLength?item.content.substring(0,contLength)+'...':item.content}}</p>
+            <p :style="contStyle">{{item.content.substring(0,contLength)+'...'}}</p>
           </div>
           <p :style="viewStyle">查看详情 ></p>
         </div>
@@ -84,10 +84,10 @@
         }
       },
       titleLength() {
-        return this.info.titleLength ? Number(this.info.titleLength) : 70
+        return this.info.titleLength ? Number(this.info.titleLength) : 60
       },
       contLength() {
-        return this.info.contLength ? Number(this.info.contLength) : 140
+        return this.info.contLength ? Number(this.info.contLength) : 100
       },
       timeStyle() {
         return {

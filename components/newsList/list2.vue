@@ -12,7 +12,7 @@
         <div class="item-left">
           <div>
             <p :style="titleStyle">{{item.nm.length>titleLength?item.nm.substring(0,titleLength)+'...':item.nm}}</p>
-            <p :style="contStyle">{{item.content.length>contLength?item.content.substring(0,contLength)+'...':item.content}}</p>
+            <p :style="contStyle">{{item.content.substring(0,contLength)+'...'}}</p>
           </div>
           <p :style="timeStyle">{{item.releTm.substring(0,10)}}</p>
         </div>

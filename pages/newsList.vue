@@ -120,7 +120,7 @@ export default {
             item.month = date.split('-')[1]+'.'+date.split('-')[2]
             item.nm = item.title
             item.content = item.cont.replace(/<\/?[^>]*>/g, "").replace(/&nbsp;/ig, "");
-            item.content = item.content.slice(0,35)+'...'
+            // item.content = item.content.slice(0,35)+'...'
           })
           this.list = res.records
           this.total = res.total

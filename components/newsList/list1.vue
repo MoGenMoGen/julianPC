@@ -22,7 +22,7 @@
         </p>
         <img :src="item.imgUrl" :style="imgStyle"/>
         <p :style="titleStyle">{{item.nm}}</p>
-        <p :style="contStyle">{{item.content}}</p>
+        <p :style="contStyle">{{item.content.substring(0,35)}}</p>
       </div>
     </div>
   </div>
