@@ -8,6 +8,7 @@
     <myFooter
       :width="width"
       :bWidth="bWidth"
+      :footTemplate="footTemplate"
     ></myFooter>
   </div>
 </template>
@@ -45,6 +46,7 @@ export default {
       ifHeader: true, //是否显示头部，
       ifTopic: false, //是否专题
       pageId:'',
+      footTemplate: ''
     };
   },
   computed: {
@@ -57,7 +59,7 @@ export default {
     })
     this.navList = data;
     this.getNav()
-
+    this.getTotalDetail()
     this.changeRoute();
     // this.$nextTick(() => {
       this.getWidth();
@@ -81,6 +83,11 @@ export default {
         this.pageId = info.id
       }
       this.setPageId(this.pageId)
+    },
+    async getTotalDetail () {
+      let data = await this.api.getTotalDetail()
+      this.footTemplate = data.templateCont
+      console.log(data)
     },
     ifPC() {
       let appUrl = "http://zjfyweb.jinkworld.com/";

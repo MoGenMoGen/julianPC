@@ -1,15 +1,15 @@
 <template>
   <div id="footer">
     <div class="main" :style="{width:width+'px'}">
-      Copyight©2004-2019  宁波聚联科技有限公司
-
+      <!-- Copyight©2004-2019  宁波聚联科技有限公司 -->
+	  <div v-html="footTemplate"></div>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: "App",
-  props: ["width", "bWidth"],
+  props: ["width", "bWidth","footTemplate"],
   data() {
     return {
       // img:[],
@@ -56,9 +56,8 @@ export default {
   color: #666;
   border-top: 1px solid rgba(0,0,0,0.1);
   .main{
-    margin: 40px auto;
-    text-align: center;
+    margin: 20px auto;
+    // text-align: center;
   }
 }
 </style>
-

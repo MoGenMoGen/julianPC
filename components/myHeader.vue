@@ -11,7 +11,7 @@
             @mouseleave="item.active=false">
           <p  @click="toPage(item)">{{item.name}}</p>
           <div class="itemList" v-show="item.active && currentList.length">
-            <p v-for="(v,i) in currentList" :key="i" @click="toPage(v)">{{v.name}}1</p>
+            <p v-for="(v,i) in currentList" :key="i" @click="toPage(v,item.id)">{{v.name}}1</p>
           </div>
         </li>
       </ul>
@@ -71,12 +71,18 @@ export default {
         }
         this.$set(this.navList,index,item)
       })
+      console.log(this.navList)
     },
 
-    toPage(item) {
+    toPage(item,id) {
 
       console.log(item)
-
+      if(id) {
+        this.$store.commit('setPageId',id)
+      } else {
+        this.$store.commit('setPageId',item.id)
+      }
+      console.log(this.pageId)
       if (item.types==9){//自定义页面
         window.location.href = "./?pageId="+item.id;
       } else if(item.types == 2) { //栏目

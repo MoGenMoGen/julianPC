@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 const store = ()=>new Vuex.Store({
   state: {
-    pageId:'',  //自有商品的购物车
+    pageId:'',  //当前栏目id
   },
   mutations:{
     setPageId:(state,data)=>{

@@ -78,6 +78,14 @@ function post(url, data, header) {
 }
 
 class api {
+  // 获取全站配置
+  getTotalDetail() {
+    return new Promise((resolve, reject) => {
+      get("/open/blade-site/siteconf/detail").then(res => {
+        resolve(res.data)
+      });
+    });
+  }
   //获楼层信息
   getPageInfo(cd) {
     return new Promise((resolve, reject) => {
