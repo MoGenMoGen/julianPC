@@ -1,6 +1,9 @@
 // const app = getApp()
 // Vue.prototype.globalData = getApp().globalData
 // http://ht.jiaxiangtech.com
+
+
+
 import { MessageBox } from 'element-ui'
 // let hostUrl = "http://127.0.0.1"
 // let hostUrl = "http://pj.xiaomy.net"
@@ -16,7 +19,16 @@ if (process.client) {
 const axios = require('axios');
 function get(url, data, header) {
     // console.log(url)
-
+    let headers = {};
+    let token = '';
+    if (process.client && window.sessionStorage.getItem('token')) {
+        token = window.sessionStorage.getItem('token')
+        headers = { ...header, ...{ "Blade-Auth": 'bearer ' + token } }
+    }
+    else{
+        token = window.sessionStorage.getItem('openToken')
+        headers = { ...header, ...{ "Blade-Auth": 'bearer ' + token } }
+    }
     let myData = {};
     if (data) {
         //过滤掉空的参数
@@ -28,9 +40,7 @@ function get(url, data, header) {
     }
 
     let promise = new Promise((resolve, reject) => {
-        axios.get(url, {
-            params: data
-        })
+        axios.get(url, { params: data, headers })
             .then(function (res) {
                 if (res.data.code === 200) {
                     resolve(res.data)
@@ -54,11 +64,22 @@ function get(url, data, header) {
 }
 
 function post(url, data, header) {
-
+    let headers = {};
+    let token = '';
+    if (process.client && window.sessionStorage.getItem('token')) {
+        token = window.sessionStorage.getItem('token')
+        headers = { ...header, ...{ "Blade-Auth": 'bearer ' + token } }
+    }
+    else{
+        token = window.sessionStorage.getItem('openToken')
+        headers = { ...header, ...{ "Blade-Auth": 'bearer '+ token } }
+    }
     let promise = new Promise((resolve, reject) => {
-        axios.post(url, data)
+        axios.post(url, data, { headers })
             .then(function (res) {
-                if (res.data.code === 0) {
+                if (url == '/blade-auth/oauth/opentokenByDomain')
+                    resolve(res.data)
+                else if (res.data.code === 0) {
                     resolve(res.data)
                 } else {
                     MessageBox({
@@ -78,64 +99,64 @@ function post(url, data, header) {
 }
 
 class api {
-  // 获取开发接口token
-  getOpenToken() {
-    return new Promise((resolve => {
-        post('/blade-auth/oauth/opentokenByDomain',{},{'Authorization': 'Basic c2FiZXI6c2FiZXJfc2VjcmV0'}).then(res => {
-            resolve(res)
-        })
-    }))
-  }
-  // 获取全站配置
-  getTotalDetail() {
-    return new Promise((resolve, reject) => {
-      get("/open/blade-site/siteconf/detail").then(res => {
-        resolve(res.data)
-      });
-    });
-  }
-  //获楼层信息
-  getPageInfo(cd) {
-    return new Promise((resolve, reject) => {
-      get("/open/blade-site/sitehomefloor/list?columns="+cd).then(res => {
-
-        resolve(res.data)
-      });
-    });
-  }
-  //获取广告
-  getBannerById(id) {
-    return new Promise((resolve, reject) => {
-      get("/open/advertinfo/listAdsByPosId?posId="+id).then(res => {
-        resolve(res.data)
-      });
-    });
-  }
-  //获取新闻
-  getNews(data) {
-    return new Promise((resolve, reject) => {
-      get("/open/blade-content/contentdetail/page",data).then(res => {
-        resolve(res.data)
-      });
-    });
-  }
-    //获取栏目
-    getMenuNav(id) {
+    // 获取开发接口token
+    getOpenToken() {
+        return new Promise((resolve => {
+            post('/blade-auth/oauth/opentokenByDomain', {}, { 'Authorization': 'Basic c2FiZXI6c2FiZXJfc2VjcmV0' }).then(res => {
+                resolve(res)
+            })
+        }))
+    }
+    // 获取全站配置
+    getTotalDetail() {
         return new Promise((resolve, reject) => {
-            get("/open/blade-site/sitecolumns/list?parentId="+id).then(res => {
+            get("/open/blade-site/siteconf/detail").then(res => {
+                resolve(res.data)
+            });
+        });
+    }
+    //获楼层信息
+    getPageInfo(cd) {
+        return new Promise((resolve, reject) => {
+            get("/open/blade-site/sitehomefloor/list?columns=" + cd).then(res => {
 
                 resolve(res.data)
             });
         });
     }
-  //获取栏目详情
-  getMenuDetail(id) {
-    return new Promise((resolve, reject) => {
-      get("/open/blade-site/sitecolumns/detail?id="+id).then(res => {
-        resolve(res.data)
-      });
-    });
-  }
+    //获取广告
+    getBannerById(id) {
+        return new Promise((resolve, reject) => {
+            get("/open/advertinfo/listAdsByPosId?posId=" + id).then(res => {
+                resolve(res.data)
+            });
+        });
+    }
+    //获取新闻
+    getNews(data) {
+        return new Promise((resolve, reject) => {
+            get("/open/blade-content/contentdetail/page", data).then(res => {
+                resolve(res.data)
+            });
+        });
+    }
+    //获取栏目
+    getMenuNav(id) {
+        return new Promise((resolve, reject) => {
+            get("/open/blade-site/sitecolumns/list?parentId=" + id).then(res => {
+
+                resolve(res.data)
+            });
+        });
+    }
+    //获取栏目详情
+    getMenuDetail(id) {
+        return new Promise((resolve, reject) => {
+            get("/open/blade-site/sitecolumns/detail?id=" + id).then(res => {
+                resolve(res.data)
+            });
+        });
+    }
 
     //获取栏目下的列表
     getList(data) {
@@ -224,7 +245,7 @@ class api {
         });
     }
     //获取领导班子列表
-    getLeaderList(data){
+    getLeaderList(data) {
         return new Promise((resolve, reject) => {
             get("/open/blade-content/contentdetail/leader", data).then(res => {
                 resolve(res.data)
@@ -503,9 +524,9 @@ class api {
         })
     }
     // 栏目-根据父id获取栏目列表
-    getListByParentId(data){
+    getListByParentId(data) {
         return new Promise((resolve, reject) => {
-            get("/open/blade-content/contentcat/listByParentId?parentId="+data).then(res => {
+            get("/open/blade-content/contentcat/listByParentId?parentId=" + data).then(res => {
                 resolve(res.data)
             });
         });

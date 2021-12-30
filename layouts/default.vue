@@ -78,7 +78,8 @@ export default {
     ...mapMutations(['setPageId']),
     async getToken(){
       let data = await this.api.getOpenToken()
-      console.log(data)
+      this.until.seSave('openToken',data.refresh_token)
+      console.log(11111111,data)
     },
     async getNav() {
       if(this.until.getQueryString('pageId')){
