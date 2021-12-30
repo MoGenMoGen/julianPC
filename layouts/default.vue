@@ -53,6 +53,7 @@ export default {
 
   },
   async mounted() {
+    this.getToken()
     let data = await this.api.getMenuNav(0);
     data.forEach(item=>{
       item.active = false
@@ -75,6 +76,10 @@ export default {
 
   methods: {
     ...mapMutations(['setPageId']),
+    async getToken(){
+      let data = await this.api.getOpenToken()
+      console.log(data)
+    },
     async getNav() {
       if(this.until.getQueryString('pageId')){
         this.pageId = this.until.getQueryString('pageId')

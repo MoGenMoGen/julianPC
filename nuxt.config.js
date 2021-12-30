@@ -75,6 +75,13 @@ export default {
         '^/open': '/open', // 把 /api 替换成 /
         changeOrigin: true // 表示是否跨域
       }
+    },
+    '/blade-auth': {
+      target: 'http://www.jinkworld.com', // 目标接口域名
+      pathRewrite: {
+        '^/blade-auth': '/blade-auth', // 把 /api 替换成 /
+        changeOrigin: true // 表示是否跨域
+      }
     }
 
   },

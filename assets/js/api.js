@@ -78,6 +78,14 @@ function post(url, data, header) {
 }
 
 class api {
+  // 获取开发接口token
+  getOpenToken() {
+    return new Promise((resolve => {
+        post('/blade-auth/oauth/opentokenByDomain',{},{'Authorization': 'Basic c2FiZXI6c2FiZXJfc2VjcmV0'}).then(res => {
+            resolve(res)
+        })
+    }))
+  }
   // 获取全站配置
   getTotalDetail() {
     return new Promise((resolve, reject) => {
