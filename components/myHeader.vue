@@ -112,7 +112,7 @@ export default {
     display: -webkit-flex;
     align-items: center;
     .logo{
-      flex: 1;
+      // flex: 1;
       img{
         max-width: 200px;
       }

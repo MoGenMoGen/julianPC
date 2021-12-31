@@ -95,7 +95,7 @@ export default {
           this.$set(this.info,item.name,item.value)
         })
         this.size = this.info.total ? parseInt(this.info.total) : 12
-
+        console.log(1111,this.pageInfo.url);
         this.getList()
     },
     //更改一页多少个
