@@ -10,7 +10,7 @@
           v-model="keyWords">
         </el-input>
       </div>
-      <component
+      <component  
         :width="width"
         :is="pageInfo.url"
         :info="info"
